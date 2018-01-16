@@ -1,14 +1,19 @@
-new Vue({
+var vm=new Vue({
     el:"#app",
     data:{
-        title:"hello vue"
+        totalMoney:0,
+        productlist:[]
     },
     mounted:function () {
-        this.cartView();//渲染完后会自动调用cartView
+        this.cartView();//dom渲染完后会自动调用cartView，类似ready
     },
     methods:{
         cartView:function () {
-            this.title="Vue hello"
+            var _this=this;
+            this.$http.get("data/cartData.json",{id:123}).then(function (res) {
+                _this.productlist=res.data.result.list;
+                _this.totalMoney=res.data.result.totalMoney;
+            });
         }
     }
 });

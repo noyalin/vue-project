@@ -24,7 +24,6 @@ var vm = new Vue({
                 //_this.totalMoney=res.data.result.totalMoney;
                 //j箭头函数的好处是里面的作用域和外面的是一样
                 this.productlist = res.data.result.list;
-            this.totalMoney = res.data.result.totalMoney;
             })
         },
         changeMoney: function (product, way) {
@@ -36,6 +35,7 @@ var vm = new Vue({
                     product.productQuantity = 1;
                 }
             }
+            this.calcTotalPrice();
         },
         selectedProduct: function (item) {
             if (typeof item.checked == 'undefined') {
@@ -70,7 +70,7 @@ var vm = new Vue({
                 console.log("1"+flag)
             }
             console.log("2"+flag)
-
+            this.calcTotalPrice();
         },
         checkAll: function () {
             this.checkAllFlag = !this.checkAllFlag;
@@ -85,9 +85,19 @@ var vm = new Vue({
                     _this.checkAllFlag = false;
                     _this.$set(item, "checked", false);
                 }
+            });
+            this.calcTotalPrice();
+        },
+        calcTotalPrice:function () {
+            var _this=this;
+           this.totalMoney=0;
+            this.productlist.forEach(function (item,index) {
+                if(item.checked){
+                    _this.totalMoney+=item.productPrice*item.productQuantity;
+                }
             })
-
         }
+
     }
 });
 

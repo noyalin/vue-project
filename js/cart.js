@@ -25,8 +25,7 @@ var vm = new Vue({
                 //j箭头函数的好处是里面的作用域和外面的是一样
                 this.productlist = res.data.result.list;
             this.totalMoney = res.data.result.totalMoney;
-        })
-            ;
+            })
         },
         changeMoney: function (product, way) {
             if (way > 0) {
@@ -46,22 +45,48 @@ var vm = new Vue({
                 this.$set(item, "checked", true);
             } else {
                 item.checked = !item.checked;
+                if(item.checked==false){
+                    this.checkAllFlag=false;
+                }
             }
+            var flag=false;
+            for(var i=0;i<this.productlist.length;i++){
+                console.log(this.productlist.length)
+                if(this.productlist[i].checked){
+                    flag=true;
+                    console.log(this.productlist[i]+"-"+flag)
+                }else {
+                    flag=false;
+                    console.log(this.productlist[i]+"-"+flag);
+                    //一旦存在没有被选的，就跳出循环
+                    break;
+                }
+            }
+            if(flag==true){
+                this.checkAllFlag=true;
+                console.log("1"+flag)
+            }else {
+                this.checkAllFlag=false;
+                console.log("1"+flag)
+            }
+            console.log("2"+flag)
 
         },
-        checkAll: function (flag) {
-            this.checkAllFlag = flag;
+        checkAll: function () {
+            this.checkAllFlag = !this.checkAllFlag;
             var _this = this;
             this.productlist.forEach(function (item, index) {
-                if (typeof item.checked == 'undefined') {
+                if (_this.checkAllFlag) {
                     //全局
                     //Vue.set(item,"checked",true);
                     //局部
-                    _this.$set(item, "checked", _this.checkAllFlag);
+                    _this.$set(item, "checked", true);
                 } else {
-                    item.checked = _this.checkAllFlag;
+                    _this.checkAllFlag = false;
+                    _this.$set(item, "checked", false);
                 }
             })
+
         }
     }
 });
